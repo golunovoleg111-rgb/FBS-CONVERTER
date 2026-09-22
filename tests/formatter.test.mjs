@@ -14,7 +14,7 @@ test('nonadjacent duplicates merge, different sizes/colors/articles remain separ
 });
 test('both target brands are split into complete independent results',()=>{
  const r=parseWorkbook(workbook([
-  ['BeltaneMan','Брюки','46','черный','M1'],
+  ['Beltane Man','Брюки','46','черный','M1'],
   ['Beltanee','Костюм','48','графит','W1'],
   ['BeltaneMan','Брюки','46','черный','M1'],
   ['Beltanee','Костюм','50','графит','W1']
