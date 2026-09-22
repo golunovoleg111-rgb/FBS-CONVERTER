@@ -18,10 +18,11 @@ pnpm install --frozen-lockfile
 pnpm dev
 pnpm test
 pnpm build
+pnpm sync-pages
 ```
 
 ## Публикация
-В Settings → Pages выберите Source: GitHub Actions. Workflow автоматически проверяет и публикует main.
+Workflow автоматически проверяет и публикует main. Собранная версия также хранится в корне репозитория для режима публикации из ветки.
 Адрес: https://golunovoleg111-rgb.github.io/FBS-CONVERTER/
 
 Исходные задания пользователей и PDF не хранятся в репозитории.
