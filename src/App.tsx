@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from 'react';
 import { parseWorkbook, makePdf } from '../lib/formatter.mjs';
+import CsvMerger from './CsvMerger';
 
 function outputBase(name: string) {
   return name.replace(/\.xlsx?$/i, '');
@@ -33,6 +34,7 @@ async function downloadPicking(result: any, name: string, mode: 'unified' | 'sep
 }
 
 export default function Home() {
+  const [tab, setTab] = useState<'pdf' | 'csv'>('pdf');
   const input = useRef<HTMLInputElement>(null);
   const [result, setResult] = useState<any>(null);
   const [name, setName] = useState('');
@@ -81,7 +83,10 @@ export default function Home() {
     finally { setBusy(false); }
   }
   return <main>
-    <header><span className="logo">FBS<span> / </span>СБОРКА</span><span className="badge">Excel → PDF</span></header>
+    <header><span className="logo">FBS<span> / </span>КОНВЕРТЕР</span><span className="badge">{tab === 'pdf' ? 'Excel → PDF' : 'CSV → общий CSV'}</span></header>
+    <nav className="tabs" aria-label="Режим конвертера"><button aria-pressed={tab === 'pdf'} onClick={() => setTab('pdf')}>Excel → PDF</button><button aria-pressed={tab === 'csv'} onClick={() => setTab('csv')}>Объединить CSV</button></nav>
+    <div hidden={tab !== 'csv'}><CsvMerger/></div>
+    <div hidden={tab !== 'pdf'}>
     <section className="intro"><p className="eyebrow">СБОРОЧНОЕ ЗАДАНИЕ</p><h1>Меньше строк.<br/>Удобнее собирать.</h1><p>Одинаковые товары — в одной строке.<br/>Каждый размер — отдельно, количество — на виду.</p></section>
     <section className="upload" onDragOver={e=>e.preventDefault()} onDrop={e=>{e.preventDefault(); void load(e.dataTransfer.files[0]);}}>
       <div className="fileIcon" aria-hidden="true">↓</div><h2>{busy ? 'Обрабатываем…' : 'Загрузите сборочное задание'}</h2>
@@ -105,5 +110,6 @@ export default function Home() {
       <div className="tableWrap"><table><thead><tr>{['Наименование','Размер','Цвет','Артикул продавца','Кол-во'].map(s=><th key={s}>{s}</th>)}</tr></thead><tbody>{result.items.map((r:any,i:number)=><tr key={i}>{r.values.map((v:string,j:number)=><td key={j} className={j===1?'size':''}>{v}</td>)}<td className="qty"><span>{r.count}</span></td></tr>)}</tbody></table></div>
     </section>}
     <footer>В PDF: наименование, размер, цвет, артикул и количество.<br/>Формат A4 · Чёрно-белая печать</footer>
+    </div>
   </main>;
 }
